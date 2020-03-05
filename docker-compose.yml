@@ -11,7 +11,8 @@ services:
       - keycloak_db_user
       - keycloak_db_password
     environment:
-      # KEYCLOAK_FRONTEND_URL: "https://auth.archi-lab.io"
+      PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_FRONTEND_URL: "https://login.archi-lab.io/auth"
       KEYCLOAK_USER_FILE: /run/secrets/keycloak_user
       KEYCLOAK_PASSWORD_FILE: /run/secrets/keycloak_password
       DB_USER_FILE: /run/secrets/keycloak_db_user
