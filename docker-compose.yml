@@ -1,0 +1,50 @@
+version: "3.7"
+
+services:
+  keycloak:
+    image: jboss/keycloak:9.0.0
+    ports:
+      - "8080:8080"
+    secrets:
+      - keycloak_user
+      - keycloak_password
+      - keycloak_db_user
+      - keycloak_db_password
+    environment:
+      # KEYCLOAK_FRONTEND_URL: "https://auth.archi-lab.io"
+      KEYCLOAK_USER_FILE: /run/secrets/keycloak_user
+      KEYCLOAK_PASSWORD_FILE: /run/secrets/keycloak_password
+      DB_USER_FILE: /run/secrets/keycloak_db_user
+      DB_PASSWORD_FILE: /run/secrets/keycloak_db_password
+      DB_VENDOR: postgres
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+    volumes:
+      - keycloak-tmp:/tmp
+
+  postgres:
+    image: postgres:12.2
+    secrets:
+      - keycloak_db_user
+      - keycloak_db_password
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/keycloak_db_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/keycloak_db_password
+      POSTGRES_DB: keycloak
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+secrets:
+  keycloak_user:
+    external: true
+  keycloak_password:
+    external: true
+  keycloak_db_user:
+    external: true
+  keycloak_db_password:
+    external: true
+
+volumes:
+  keycloak-tmp:
+  postgres-data:
