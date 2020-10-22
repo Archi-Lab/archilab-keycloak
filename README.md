@@ -17,6 +17,16 @@ There are some customizations of the original Keycloak themes in the themes
 folder of the Docker context. Documentation can be found
 [here](https://www.keycloak.org/docs/latest/server_development/#_themes).
 
+## Build
+
+There are two image variants required to be built prior to starting the
+services. One for development and one for production. To build the images run:
+
+```bash
+$ build-dev.sh
+$ build.sh
+```
+
 ## Setup
 
 To start Keycloak in production mode run:
