@@ -1,0 +1,6 @@
+version: '3.7'
+
+services:
+  keycloak:
+    environment:
+      KEYCLOAK_FRONTEND_URL: 'https://login.archi-lab.io/auth'

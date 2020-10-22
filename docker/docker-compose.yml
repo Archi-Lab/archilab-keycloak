@@ -1,18 +1,17 @@
-version: "3.7"
+version: '3.7'
 
 services:
   keycloak:
-    image: jboss/keycloak:9.0.0
+    image: archilab-keycloak
     ports:
-      - "8080:8080"
+      - '8080:8080'
     secrets:
       - keycloak_user
       - keycloak_password
       - keycloak_db_user
       - keycloak_db_password
     environment:
-      PROXY_ADDRESS_FORWARDING: "true"
-      KEYCLOAK_FRONTEND_URL: "https://login.archi-lab.io/auth"
+      PROXY_ADDRESS_FORWARDING: 'true'
       KEYCLOAK_USER_FILE: /run/secrets/keycloak_user
       KEYCLOAK_PASSWORD_FILE: /run/secrets/keycloak_password
       DB_USER_FILE: /run/secrets/keycloak_db_user
@@ -20,11 +19,10 @@ services:
       DB_VENDOR: postgres
       DB_ADDR: postgres
       DB_DATABASE: keycloak
-    volumes:
-      - keycloak-tmp:/tmp
+      KEYCLOAK_DEFAULT_THEME: ihbr
 
   postgres:
-    image: postgres:12.2
+    image: postgres:13.0
     secrets:
       - keycloak_db_user
       - keycloak_db_password
@@ -47,5 +45,4 @@ secrets:
     external: true
 
 volumes:
-  keycloak-tmp:
   postgres-data:

@@ -1,0 +1,5 @@
+FROM jboss/keycloak:11.0.2
+
+COPY themes/ /opt/jboss/keycloak/themes/
+
+COPY configuration/standalone-ha-no-cache.xml /opt/jboss/keycloak/standalone/configuration/standalone-ha.xml
