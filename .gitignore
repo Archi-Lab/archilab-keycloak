@@ -1,2 +1,3 @@
 backup/*
 !backup/backup.sh
+!backup/restore-db.sh
