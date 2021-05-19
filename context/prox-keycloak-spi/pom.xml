@@ -105,7 +105,7 @@
   </dependencies>
 
   <build>
-    <finalName>prox-keycloak-spi-${project.version}</finalName>
+    <finalName>prox-keycloak-spi</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
