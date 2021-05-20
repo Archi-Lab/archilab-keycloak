@@ -23,7 +23,7 @@ public class ProfessorService {
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   public ProfessorService() {
-    this.apiUrl = "https://api.dev.prox.innovation-hub.de" + RESOURCE;
+    this.apiUrl = "https://api.prox.innovation-hub.de" + RESOURCE;
   }
 
   public ProfessorService(String apiUrl) {
