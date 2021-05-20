@@ -22,8 +22,8 @@ public class CreateProfessorProfileThread extends Thread {
 
   @Override
   public void run() {
-    try {
-      while (true) {
+    while (true) {
+      try {
         var message = usersToCreateProfessorProfiles.take();
         var userModel = message.getUserModel();
         var keycloakSession = message.getKeycloakSession();
@@ -40,7 +40,7 @@ public class CreateProfessorProfileThread extends Thread {
                   "Successfully created a professor profile for user with id '" + professor.getId()
                       + "'");
 
-              //Send E-Mail to user
+              //TODO: Send E-Mail to user
             } else {
               log.error("Unexpected error while creating professor profile");
               usersToCreateProfessorProfiles.put(message);
@@ -55,15 +55,18 @@ public class CreateProfessorProfileThread extends Thread {
 
         //Wait 30s to prevent "DDoS" TODO
         Thread.sleep(30000);
+      } catch (InterruptedException e) {
+        log.error("Error occured during creation of profile", e);
+        Thread.currentThread().interrupt();
+      } catch (IllegalArgumentException e) {
+        log.error("Error building professor model", e);
       }
-    } catch (InterruptedException e) {
-      log.error("Error occured during creation of profile", e);
-      Thread.currentThread().interrupt();
     }
   }
 
   public static void putUser(CreateProfessorMessage message) throws InterruptedException {
-    usersToCreateProfessorProfiles.removeIf(e -> e.getUserModel().getId().equals(message.getUserModel().getId()));
+    usersToCreateProfessorProfiles
+        .removeIf(e -> e.getUserModel().getId().equals(message.getUserModel().getId()));
     usersToCreateProfessorProfiles.put(message);
   }
 }
