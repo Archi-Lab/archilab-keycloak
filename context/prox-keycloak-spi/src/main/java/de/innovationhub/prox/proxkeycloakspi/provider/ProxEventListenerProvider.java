@@ -26,14 +26,15 @@ public class ProxEventListenerProvider implements EventListenerProvider {
   private final static Logger log = Logger.getLogger(ProxEventListenerProvider.class);
   private final RealmModel realmModel;
   private final KeycloakSession keycloakSession;
+  private final static String REALM_ID = "archilab";
 
   public ProxEventListenerProvider(KeycloakSession keycloakSession) {
-    this.realmModel = keycloakSession.realms().getRealm("Archi-Lab");
+    this.realmModel = keycloakSession.realms().getRealm(REALM_ID);
     this.keycloakSession = keycloakSession;
 
     if (this.realmModel == null) {
-      log.error("Realm 'Archi-Lab' not found");
-      throw new IllegalArgumentException("Realm 'Archi-Lab' not found");
+      log.error("Realm ' " + REALM_ID + "' not found");
+      throw new IllegalArgumentException("Realm ' " + REALM_ID + "' not found");
     }
   }
 
