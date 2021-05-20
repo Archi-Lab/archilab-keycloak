@@ -35,10 +35,10 @@ public class RealmProfessorGroupMembershipListener implements AdminEventListener
     try {
       var groupId = getGroupId(event.getRepresentation());
       GroupModel affectedGroup = realmModel.getGroupById(groupId);
-      var professorRoleModel = keycloakSession.roles().getRealmRole(realmModel, "professor");
-      if(affectedGroup != null && professorRoleModel != null && affectedGroup.hasRole(professorRoleModel)) {
+      var professorRoleModel = realmModel.getRoles().stream().filter(r -> r.getName().equalsIgnoreCase("professor")).findFirst();
+      if(affectedGroup != null && professorRoleModel.isPresent() && affectedGroup.hasRole(professorRoleModel.get())) {
         var userId = getUserIdFromResourcePath(event.getResourcePath());
-        var userModel = keycloakSession.users().getUserById(realmModel, userId);
+        var userModel = keycloakSession.users().getUserById(userId, realmModel);
 
         if(userModel != null) {
           //Put UserProfile to queue

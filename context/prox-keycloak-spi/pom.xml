@@ -24,7 +24,7 @@
     <junit.version>5.4.0</junit.version>
     <okhttp.version>4.9.1</okhttp.version>
     <lombok.version>1.18.20</lombok.version>
-    <keycloak.version>13.0.0</keycloak.version>
+    <keycloak.version>11.0.3</keycloak.version>
   </properties>
 
   <dependencyManagement>

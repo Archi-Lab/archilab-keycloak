@@ -33,23 +33,25 @@ public class RealmProfessorRoleMappingListener implements AdminEventListener {
       var affectedRoles = getRolesByIds(realmModel,
           getRoleIds(event.getRepresentation()));
 
-      var professorRoleModel = keycloakSession.roles().getRealmRole(realmModel, "professor");
 
-      if(professorRoleModel == null) {
+      var professorRoleModel = realmModel.getRoles().stream().filter(r -> r.getName().equalsIgnoreCase("professor")).findFirst();
+
+      if(professorRoleModel.isEmpty()) {
         log.error("Could not find professor role in realm " + realmModel.getId());
-      }
+      } else {
+        //If the professor role was created
+        if (affectedRoles.stream().anyMatch(r -> affectsRole(r, professorRoleModel.get()))) {
+          var userId = getUserIdFromResourcePath(event.getResourcePath());
+          var userModel = keycloakSession.users().getUserById(userId, realmModel);
 
-      //If the professor role was created
-      if(affectedRoles.stream().anyMatch(r -> affectsRole(r, professorRoleModel))) {
-        var userId = getUserIdFromResourcePath(event.getResourcePath());
-        var userModel = keycloakSession.users().getUserById(realmModel, userId);
-
-        if(userModel != null) {
-          //Put UserProfile to queue
-          var message = new CreateProfessorMessage(userModel, keycloakSession);
-          CreateProfessorProfileThread.putUser(message);
-        } else {
-          log.error("Could not find user with id '" + userId + "' in realm " + realmModel.getId());
+          if (userModel != null) {
+            //Put UserProfile to queue
+            var message = new CreateProfessorMessage(userModel, keycloakSession);
+            CreateProfessorProfileThread.putUser(message);
+          } else {
+            log.error(
+                "Could not find user with id '" + userId + "' in realm " + realmModel.getId());
+          }
         }
       }
     } catch (Exception e) {
@@ -73,7 +75,7 @@ public class RealmProfessorRoleMappingListener implements AdminEventListener {
 
   private List<RoleModel> getRolesByIds(RealmModel realmModel, Iterable<String> ids) {
     return StreamSupport.stream(ids.spliterator(), false)
-        .map(id -> keycloakSession.roles().getRoleById(realmModel, id)).collect(
+        .map(id -> realmModel.getRoleById(id)).collect(
             Collectors.toList());
   }
 
@@ -81,6 +83,6 @@ public class RealmProfessorRoleMappingListener implements AdminEventListener {
     if(roleModel.equals(roleModel1)) {
       return true;
     }
-    return roleModel.getCompositesStream().anyMatch(r -> r.equals(roleModel1));
+    return roleModel.getComposites().stream().anyMatch(r -> r.equals(roleModel1));
   }
 }

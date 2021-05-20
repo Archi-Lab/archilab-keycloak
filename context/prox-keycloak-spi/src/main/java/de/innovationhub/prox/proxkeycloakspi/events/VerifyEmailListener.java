@@ -25,8 +25,8 @@ public class VerifyEmailListener implements EventListener {
     if(email != null && !email.isBlank()) {
       if(email.trim().endsWith("@th-koeln.de") || email.trim().endsWith("@fh-koeln.de")) {
         log.info("User " + userId + " verified college email account, assigning professor group");
-        var user = keycloakSession.users().getUserById(realm, userId.toString());
-        var professorGroup = realm.getGroupsStream().filter(g -> g.getName().equalsIgnoreCase("professor")).findFirst();
+        var user = keycloakSession.users().getUserById(userId.toString(), realm);
+        var professorGroup = realm.getGroups().stream().filter(g -> g.getName().equalsIgnoreCase("professor")).findFirst();
 
         if(user != null && professorGroup.isPresent()) {
           user.joinGroup(professorGroup.get());
