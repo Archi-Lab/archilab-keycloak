@@ -1,16 +1,14 @@
 #!/usr/bin/env bash
 set -o errexit -o nounset -o pipefail
 
-if [ $# -eq 0 ]
-  then
-    echo "Please supply database user as first argument."
-    exit 1
+if [ $# -eq 0 ]; then
+  echo "Please supply database user as first argument."
+  exit 1
 fi
 
-if [ $# -gt 1 ]
-  then
-    echo "Too many arguments. Only supply the database user."
-    exit 1
+if [ $# -gt 1 ]; then
+  echo "Too many arguments. Only supply the database user."
+  exit 1
 fi
 
 workdir="$(
@@ -40,5 +38,20 @@ docker cp "${keycloak_stack_service_instance}.${keycloak_task_id}:/opt/jboss/key
 
 {
   docker exec "${db_stack_service_instance}.${db_task_id}" \
-    pg_dump --username="${db_user}" --clean "${db_name}"
+    pg_dump --username="${db_user}" "${db_name}"
 } >"${backup_dir}/keycloak.sql"
+
+{
+  docker exec "${db_stack_service_instance}.${db_task_id}" \
+    pg_dump --username="${db_user}" --clean "${db_name}"
+} >"${backup_dir}/keycloak-clean.sql"
+
+{
+  docker exec "${db_stack_service_instance}.${db_task_id}" \
+    pg_dumpall --username="${db_user}"
+} >"${backup_dir}/keycloak-all.sql"
+
+{
+  docker exec "${db_stack_service_instance}.${db_task_id}" \
+    pg_dumpall --username="${db_user}" --clean
+} >"${backup_dir}/keycloak-all-clean.sql"
