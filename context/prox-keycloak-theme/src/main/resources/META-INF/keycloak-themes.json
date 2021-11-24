@@ -1,0 +1,8 @@
+{
+  "themes": [
+    {
+      "name": "ihbr",
+      "types": ["account", "admin", "email", "login", "welcome"]
+    }
+  ]
+}

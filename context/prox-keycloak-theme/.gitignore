@@ -1,0 +1,2 @@
+target/**
+!target/prox-keycloak-theme.jar
