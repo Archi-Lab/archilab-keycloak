@@ -65,7 +65,7 @@ To restore the backup of the database make sure Keycloak is shut down and run
 only the database:
 
 ```bash
-$ start-db-only.sh
+$ run-db-only.sh
 ```
 
 Then restore the backup with:
