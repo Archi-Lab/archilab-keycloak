@@ -9,5 +9,4 @@ service_name='archilab-keycloak'
 
 docker stack deploy \
   -c "${workdir}/docker/docker-compose.yml" \
-  -c "${workdir}/docker/docker-compose.dev.yml" \
   "${service_name}"

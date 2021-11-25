@@ -1,5 +1,5 @@
 FROM jboss/keycloak:15.0.2
 
-COPY prox-keycloak-spi/target/prox-keycloak-spi.jar /opt/jboss/keycloak/standalone/deployments/prox-keycloak-spi.jar
+COPY providers/prox-keycloak-spi/target/prox-keycloak-spi.jar /opt/jboss/keycloak/standalone/deployments/
 
-COPY prox-keycloak-theme/target/prox-keycloak-theme.jar /opt/jboss/keycloak/standalone/deployments/prox-keycloak-theme.jar
+COPY themes/target/prox-keycloak-themes.jar /opt/jboss/keycloak/standalone/deployments/
