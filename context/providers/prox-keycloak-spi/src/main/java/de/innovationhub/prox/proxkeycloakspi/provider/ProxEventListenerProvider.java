@@ -26,7 +26,7 @@ public class ProxEventListenerProvider implements EventListenerProvider {
   private final static Logger log = Logger.getLogger(ProxEventListenerProvider.class);
   private final RealmModel realmModel;
   private final KeycloakSession keycloakSession;
-  private final static String REALM_ID = "archilab";
+  private final static String REALM_ID = "innovation-hub-bergisches-rheinland";
 
   public ProxEventListenerProvider(KeycloakSession keycloakSession) {
     this.realmModel = keycloakSession.realms().getRealm(REALM_ID);
