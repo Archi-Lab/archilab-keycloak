@@ -1,4 +1,4 @@
-FROM jboss/keycloak:15.0.2
+FROM jboss/keycloak:16.1.1
 
 COPY providers/prox-keycloak-spi/target/prox-keycloak-spi.jar /opt/jboss/keycloak/standalone/deployments/
 
