@@ -1,7 +1,5 @@
 package de.innovationhub.prox.proxkeycloakspi.events;
 
-import de.innovationhub.prox.proxkeycloakspi.threads.CreateProfessorMessage;
-import de.innovationhub.prox.proxkeycloakspi.threads.CreateProfessorProfileThread;
 import java.util.UUID;
 import org.jboss.logging.Logger;
 import org.keycloak.events.Event;
@@ -25,19 +23,15 @@ public class VerifyEmailListener implements EventListener {
     if(email != null && !email.isBlank()) {
       if(email.trim().endsWith("@th-koeln.de") || email.trim().endsWith("@fh-koeln.de")) {
         log.debug("User " + userId + " verified college email account '" + email + "', assigning professor group");
-        var user = keycloakSession.users().getUserById(userId.toString(), realm);
-        var professorGroup = realm.getGroups().stream().filter(g -> g.getName().equalsIgnoreCase("professor")).findFirst();
+        var user = keycloakSession.users().getUserById(realm, userId.toString());
+        var professorGroup = realm.getGroupsStream().filter(g -> g.getName().equalsIgnoreCase("professor")).findFirst();
 
         if(user != null && professorGroup.isPresent()) {
-          user.joinGroup(professorGroup.get());
-          log.debug("User " + userId + " was successfully assigned to professor group, scheduling a profile creation...");
-          var message = new CreateProfessorMessage(user, keycloakSession);
           try {
-            CreateProfessorProfileThread.putUser(message);
-            log.debug("Profile creation for user " + userId + " was successfully scheduled");
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
+            user.joinGroup(professorGroup.get());
+            log.debug("User " + userId + " was successfully assigned to professor group");
+          } catch (Exception e) {
+            log.error("Couldn't asign user to professor group", e);
           }
         } else {
           if(user == null) {

@@ -4,8 +4,6 @@ package de.innovationhub.prox.proxkeycloakspi.provider;
 import de.innovationhub.prox.proxkeycloakspi.events.EventListener;
 import de.innovationhub.prox.proxkeycloakspi.events.VerifyEmailListener;
 import de.innovationhub.prox.proxkeycloakspi.events.admin.AdminEventListener;
-import de.innovationhub.prox.proxkeycloakspi.events.admin.RealmProfessorGroupMembershipListener;
-import de.innovationhub.prox.proxkeycloakspi.events.admin.RealmProfessorRoleMappingListener;
 import de.innovationhub.prox.proxkeycloakspi.utils.KeycloakUtils;
 import java.util.Collections;
 import java.util.HashMap;
@@ -57,37 +55,12 @@ public class ProxEventListenerProvider implements EventListenerProvider {
   }
 
   @Override
-  public void onEvent(AdminEvent adminEvent, boolean b) {
-    if (adminEvent.getRealmId().equalsIgnoreCase(this.realmModel.getId())) {
-      log.debug("Detected admin event " + adminEvent.getResourceType() + " in realm");
-      log.debug(KeycloakUtils.adminEventToString(adminEvent));
+  public void close() {
 
-      AdminEventListener eventListener = null;
-
-      if(adminEvent.getResourceType() == ResourceType.REALM_ROLE_MAPPING) {
-        eventListener = new RealmProfessorRoleMappingListener(keycloakSession, realmModel);
-      } else if(adminEvent.getResourceType() == ResourceType.GROUP_MEMBERSHIP) {
-        eventListener = new RealmProfessorGroupMembershipListener(keycloakSession, realmModel);
-      }
-
-      if(eventListener != null) {
-        if(adminEvent.getOperationType() == OperationType.ACTION) {
-          eventListener.onAction(adminEvent);
-        } else if(adminEvent.getOperationType() == OperationType.CREATE) {
-          eventListener.onCreate(adminEvent);
-        } else if(adminEvent.getOperationType() == OperationType.DELETE) {
-          eventListener.onDelete(adminEvent);
-        } else if(adminEvent.getOperationType() == OperationType.UPDATE) {
-          eventListener.onUpdate(adminEvent);
-        }
-      } else {
-        log.debug("No event listener for event found");
-      }
-    }
   }
 
   @Override
-  public void close() {
-
+  public void onEvent(AdminEvent event, boolean includeRepresentation) {
+    // Auto-generated method stub
   }
 }
