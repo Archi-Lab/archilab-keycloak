@@ -4,7 +4,7 @@
 
   <groupId>de.innovationhub.prox</groupId>
   <artifactId>prox-keycloak-spi</artifactId>
-  <version>0.1.0</version>
+  <version>1.0.0</version>
   <name>prox-keycloak-spi</name>
 
   <properties>
